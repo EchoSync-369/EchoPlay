@@ -1,15 +1,16 @@
 import { Component } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { CarouselComponent } from "../../components/carousel/carousel.component";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [],
+  imports: [CarouselComponent],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
 export class HomeComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   token: string = localStorage.getItem("access_token") || "";
 

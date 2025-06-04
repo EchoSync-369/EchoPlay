@@ -1,0 +1,78 @@
+.song-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.carousel-song-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(80, 80, 180, 0.1),
+    0 1.5px 6px 0 rgba(80, 80, 180, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-width: 220px;
+  max-width: 240px;
+  margin: 0 auto;
+}
+
+.album-art {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 12px 0 rgba(80, 80, 180, 0.1);
+}
+
+.carousel-song-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px 0 rgba(80, 80, 180, 0.18),
+    0 2px 8px 0 rgba(80, 80, 180, 0.12);
+}
+
+h3 {
+  margin: 0.5rem 0 0.2rem 0;
+  font-size: 1.1rem;
+}
+
+.song-title {
+  margin: 0.5rem 0 0.2rem 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #2d2d4d;
+  text-align: center;
+}
+
+p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.song-artist {
+  margin: 0;
+  color: #5a5a89;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.p-carousel .p-carousel-indicators .p-carousel-indicator {
+  background: #b3b3e6;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+  transition: background 0.2s;
+}
+
+.p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight {
+  background: #6366f1;
+}
