@@ -1,0 +1,22 @@
+<p-carousel
+  [value]="songs"
+  [numVisible]="numVisible"
+  [numScroll]="numVisible"
+  [circular]="true"
+  [autoplayInterval]="4000"
+>
+  <ng-template pTemplate="item" let-song>
+    <div class="carousel-song-card">
+      <img
+        [src]="
+          song.albumArt ||
+          'https://c4.wallpaperflare.com/wallpaper/358/736/35/music-icon-symbol-sign-wallpaper-preview.jpg'
+        "
+        alt="Album Art"
+        class="album-art"
+      />
+      <div class="song-title">{{ song.title }}</div>
+      <div class="song-artist">{{ song.artist }}</div>
+    </div>
+  </ng-template>
+</p-carousel>
