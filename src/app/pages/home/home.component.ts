@@ -1,18 +1,20 @@
 import { Component } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
 import { CarouselComponent } from "../../components/carousel/carousel.component";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [CarouselComponent],
+  imports: [SearchBarComponent, CarouselComponent],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
 export class HomeComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   token: string = localStorage.getItem("access_token") || "";
+  searchText = "";
 
   ngOnInit() {
     const headers = new HttpHeaders({
@@ -29,5 +31,9 @@ export class HomeComponent {
           console.error("Oopsies tehe:", err);
         },
       });
+  }
+
+  handleSearch(query: string) {
+    console.log("Searching for:", query);
   }
 }

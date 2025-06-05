@@ -1,2 +1,7 @@
-<p>home works!</p>
+<div class="home-wrapper">
+  <app-search-bar
+    [(searchTerm)]="searchText"
+    (search)="handleSearch($event)"
+  ></app-search-bar>
+</div>
 <app-carousel></app-carousel>
