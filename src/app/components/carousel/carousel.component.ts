@@ -12,10 +12,7 @@ import { SpotifyApiService } from '../../services/spotify-api/spotify-api.servic
 })
 
 export class CarouselComponent implements OnInit {
-  albums: Album[] = Array.from({ length: 20 }, (_, i) => ({
-    name: `Album ${i + 1}`,
-    artist: `Artist ${i + 1}`,
-  }));
+  albums: Album[] = [];
 
   constructor(private spotifyApiService: SpotifyApiService) {
     this.numVisible = this.getNumVisible();
@@ -32,11 +29,9 @@ export class CarouselComponent implements OnInit {
 
   private getNumVisible(): number {
     const width = window.innerWidth;
-    if (width >= 1200) return 6;
-    if (width >= 992) return 5;
-    if (width >= 768) return 4;
-    if (width >= 576) return 3;
-    return 1;
+    const cardWidth = 200 + 16;
+    const maxCards = Math.floor(width / cardWidth);
+    return Math.max(1, maxCards);
   }
 
   private onResize() {

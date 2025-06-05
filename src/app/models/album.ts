@@ -1,4 +1,5 @@
 export interface Album {
     name: string;
-    artist: string;
+    artists: { name: string }[];
+    images: { url: string }[];
 }
