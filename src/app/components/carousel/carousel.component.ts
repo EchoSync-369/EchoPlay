@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
-import { Song } from '../../models/song';
+import { Album } from '../../models/album';
+import { SpotifyApiService } from '../../services/spotify-api/spotify-api.service';
 
 @Component({
   selector: 'app-carousel',
@@ -10,18 +11,24 @@ import { Song } from '../../models/song';
   styleUrl: './carousel.component.css'
 })
 
-export class CarouselComponent {
-  songs: Song[] = Array.from({ length: 20 }, (_, i) => ({
-    title: `Song Title ${i + 1}`,
+export class CarouselComponent implements OnInit {
+  albums: Album[] = Array.from({ length: 20 }, (_, i) => ({
+    name: `Album ${i + 1}`,
     artist: `Artist ${i + 1}`,
   }));
 
-  numVisible: number;
-
-  constructor() {
+  constructor(private spotifyApiService: SpotifyApiService) {
     this.numVisible = this.getNumVisible();
     window.addEventListener('resize', this.onResize.bind(this));
   }
+
+  ngOnInit() {
+    this.spotifyApiService.getNewReleases((albums: Album[]) => {
+      this.albums = albums;
+    });
+  }
+
+  numVisible: number;
 
   private getNumVisible(): number {
     const width = window.innerWidth;

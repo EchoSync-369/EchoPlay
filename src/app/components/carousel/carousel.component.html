@@ -1,22 +1,23 @@
+<h2 class="p-mb-3">New Releases</h2>
 <p-carousel
-  [value]="songs"
+  [value]="albums"
   [numVisible]="numVisible"
   [numScroll]="numVisible"
   [circular]="true"
   [autoplayInterval]="4000"
 >
-  <ng-template pTemplate="item" let-song>
-    <div class="carousel-song-card">
+  <ng-template pTemplate="item" let-album>
+    <div class="carousel-album-card">
       <img
         [src]="
-          song.albumArt ||
+          album.images[0].url ||
           'https://c4.wallpaperflare.com/wallpaper/358/736/35/music-icon-symbol-sign-wallpaper-preview.jpg'
         "
         alt="Album Art"
         class="album-art"
       />
-      <div class="song-title">{{ song.title }}</div>
-      <div class="song-artist">{{ song.artist }}</div>
+      <div class="album-title">{{ album.name }}</div>
+      <div class="album-artist">{{ album.artists[0].name }}</div>
     </div>
   </ng-template>
 </p-carousel>
