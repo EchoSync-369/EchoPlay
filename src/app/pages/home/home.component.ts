@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
 import { CarouselComponent } from "../../components/carousel/carousel.component";
 
@@ -11,7 +12,7 @@ import { CarouselComponent } from "../../components/carousel/carousel.component"
   styleUrl: "./home.component.css",
 })
 export class HomeComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   token: string = localStorage.getItem("access_token") || "";
   searchText = "";
@@ -35,5 +36,6 @@ export class HomeComponent {
 
   handleSearch(query: string) {
     console.log("Searching for:", query);
+    this.router.navigate(["/search/" + query]);
   }
 }
