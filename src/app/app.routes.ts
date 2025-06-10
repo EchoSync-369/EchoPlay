@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { SpotifyAuthGuard } from './services/auth/spotify-auth.guard';
 import { UnauthGuard } from './services/unauth/unauth.guard';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
+import { PlayerPageComponent } from './pages/player-page/player-page.component';
 
 export const routes: Routes = [
   // Redirect to the landing page on base path
@@ -31,4 +32,10 @@ export const routes: Routes = [
     component: SearchPageComponent,
     canActivate: [SpotifyAuthGuard]
   },
+  {
+    path: "player/:type/:id",
+    component: PlayerPageComponent,
+    canActivate: [SpotifyAuthGuard]
+  },
+
 ];
