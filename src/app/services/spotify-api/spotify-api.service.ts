@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { environment } from "../../environments/environment";
 import { Album } from "../../models/album";
 
 @Injectable({
@@ -8,10 +9,36 @@ import { Album } from "../../models/album";
 export class SpotifyApiService {
   constructor(private http: HttpClient) {}
 
-  token: string = localStorage.getItem("access_token") || "";
-  headers = new HttpHeaders({
-    Authorization: `Bearer ${this.token}`,
-  });
+  get headers(): HttpHeaders {
+    const token = localStorage.getItem("access_token") || "";
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
+
+  getAccessToken(p0: (success: boolean) => void): void {
+    const body = new HttpParams()
+      .set("grant_type", "client_credentials")
+      .set("client_id", environment.clientId)
+      .set("client_secret", environment.clientSecret);
+
+    const headers = new HttpHeaders({
+      "Content-Type": "application/x-www-form-urlencoded",
+    });
+
+    this.http
+      .post<any>("https://accounts.spotify.com/api/token", body, { headers })
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem("access_token", response.access_token);
+          p0(true);
+        },
+        error: (err) => {
+          console.error("Failed to get access token:", err);
+          p0(false);
+        },
+      });
+  }
 
   getNewReleases(p0: (albums: Album[]) => void) {
     return this.http
