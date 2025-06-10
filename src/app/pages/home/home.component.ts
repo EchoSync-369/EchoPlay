@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
 import { CarouselComponent } from "../../components/carousel/carousel.component";
+import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
+import { Album } from "../../models/album";
 
 @Component({
   selector: "app-home",
@@ -11,31 +12,22 @@ import { CarouselComponent } from "../../components/carousel/carousel.component"
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
-export class HomeComponent {
-  constructor(private http: HttpClient, private router: Router) {}
-
-  token: string = localStorage.getItem("access_token") || "";
+export class HomeComponent implements OnInit {
   searchText = "";
+  newReleases: Album[] = [];
+
+  constructor(private spotifyApi: SpotifyApiService, private router: Router) {
+  }
 
   ngOnInit() {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+    this.spotifyApi.getNewReleases((albums: Album[]) => {
+      this.newReleases = albums;
     });
-
-    this.http
-      .get<any>("https://api.spotify.com/v1/browse/categories", { headers })
-      .subscribe({
-        next: (response) => {
-          console.log("Response received:", response);
-        },
-        error: (err) => {
-          console.error("Oopsies tehe:", err);
-        },
-      });
   }
 
   handleSearch(query: string) {
     console.log("Searching for:", query);
     this.router.navigate(["/search/" + query]);
   }
+
 }
