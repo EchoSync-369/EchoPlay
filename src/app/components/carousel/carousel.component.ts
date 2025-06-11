@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [CarouselModule],
+  imports: [CarouselModule, CommonModule],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css'
 })
