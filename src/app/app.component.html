@@ -1,4 +1,10 @@
 <div class="theme-button-container">
   <app-theme-button></app-theme-button>
 </div>
+<div class="search-wrapper" *ngIf="showSearchBar">
+  <app-search-bar
+    [(searchTerm)]="searchText"
+    (search)="handleSearch($event)"
+  ></app-search-bar>
+</div>
 <router-outlet></router-outlet>
