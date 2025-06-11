@@ -1,0 +1,9 @@
+button {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
