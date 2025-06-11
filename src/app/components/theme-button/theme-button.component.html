@@ -1,0 +1,6 @@
+<button (click)="toggleTheme()">
+  <i *ngIf="isDarkMode; else lightMode" class="pi pi-sun"></i>
+  <ng-template #lightMode>
+    <i class="pi pi-moon"></i>
+  </ng-template>
+</button>
