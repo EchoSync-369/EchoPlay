@@ -8,7 +8,7 @@ import { Album } from "../../models/album";
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [SearchBarComponent, CarouselComponent],
+  imports: [CarouselComponent],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
@@ -29,5 +29,4 @@ export class HomeComponent implements OnInit {
     console.log("Searching for:", query);
     this.router.navigate(["/search/" + query]);
   }
-
 }

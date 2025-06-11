@@ -19,6 +19,7 @@ export const routes: Routes = [
     path: "landing",
     component: LandingPageComponent,
     canActivate: [UnauthGuard],
+    data: { showSearchBar: false },
   },
 
   // "Authenticated" routes
@@ -26,16 +27,19 @@ export const routes: Routes = [
     path: "home",
     component: HomeComponent,
     canActivate: [SpotifyAuthGuard],
+    data: { showSearchBar: true },
   },
   {
     path: "search/:query",
     component: SearchPageComponent,
     canActivate: [SpotifyAuthGuard],
+    data: { showSearchBar: true },
   },
   {
     path: "player/:type/:id",
     component: PlayerPageComponent,
     canActivate: [SpotifyAuthGuard],
+    data: { showSearchBar: true },
   },
 
   // Fallback route for any unmatched paths
