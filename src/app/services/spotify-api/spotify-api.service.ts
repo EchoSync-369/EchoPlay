@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { Album } from "../../models/album";
 
@@ -7,7 +8,7 @@ import { Album } from "../../models/album";
   providedIn: "root",
 })
 export class SpotifyApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   get headers(): HttpHeaders {
     const token = localStorage.getItem("access_token") || "";
@@ -57,6 +58,10 @@ export class SpotifyApiService {
         },
         error: (err) => {
           console.error("Oopsies tehe:", err);
+          if (err.status === 401) {
+            localStorage.removeItem("access_token");
+            this.router.navigate(['/landing']);
+          } 
           p0([]);
         },
       });
@@ -79,6 +84,10 @@ export class SpotifyApiService {
         },
         error: (err) => {
           console.error("Search error:", err);
+            if (err.status === 401) {
+            localStorage.removeItem("access_token");
+            this.router.navigate(['/landing']);
+            } 
           p0(null);
         },
       });
