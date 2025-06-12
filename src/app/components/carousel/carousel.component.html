@@ -3,14 +3,15 @@
   [numVisible]="numVisible"
   [numScroll]="numVisible"
   [circular]="true"
-  [autoplayInterval]="4000"
+  [autoplayInterval]="5000"
 >
   <ng-template pTemplate="item" let-data>
     <div class="carousel-album-card">
       <img
         [src]="
-          data.images[0].url ||
-          'https://c4.wallpaperflare.com/wallpaper/358/736/35/music-icon-symbol-sign-wallpaper-preview.jpg'
+          (data.images && data.images.length > 0 && data.images[0].url) ?
+            data.images[0].url :
+            'https://c4.wallpaperflare.com/wallpaper/358/736/35/music-icon-symbol-sign-wallpaper-preview.jpg'
         "
         alt="Album Art"
         class="album-art"

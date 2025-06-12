@@ -36,45 +36,40 @@ export class SearchPageComponent implements OnDestroy {
       // Debug: log the results to verify structure
       console.log("Spotify search results:", results);
 
-      this.albums = results.albums?.items
+      this.albums = results?.albums?.items?.length
         ? results.albums.items.filter(Boolean).map((album: any) => ({
-            id: album.id,
-            name: album.name,
-            artists:
-              album.artists?.map((artist: any) => artist.name).join(", ") || "",
-            images: album.images || [],
+            id: album?.id ?? "",
+            name: album?.name ?? "",
+            artists: album?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
+            images: album?.images ?? [],
           }))
         : [];
-
-      this.artists = results.artists?.items
+      
+      this.artists = results?.artists?.items?.length
         ? results.artists.items.filter(Boolean).map((artist: any) => ({
-            id: artist.id,
-            name: artist.name,
-            images: artist.images || [],
+            id: artist?.id ?? "",
+            name: artist?.name ?? "",
+            images: artist?.images ?? [],
           }))
         : [];
 
-      this.playlists =
-        results.playlists && results.playlists.items
-          ? results.playlists.items.filter(Boolean).map((playlist: any) => ({
-              id: playlist.id,
-              name: playlist.name,
-              images: playlist.images || [],
-            }))
-          : [];
+      this.playlists = results?.playlists?.items?.length
+        ? results.playlists.items.filter(Boolean).map((playlist: any) => ({
+            id: playlist?.id ?? "",
+            name: playlist?.name ?? "",
+            images: playlist?.images ?? [],
+          }))
+        : [];
 
-      this.tracks =
-        results.tracks && results.tracks.items
-          ? results.tracks.items.filter(Boolean).map((track: any) => ({
-              id: track.id,
-              name: track.name,
-              artists:
-                track.artists?.map((artist: any) => artist.name).join(", ") ||
-                "",
-              album: track.album?.name || "",
-              images: track.album?.images || [],
-            }))
-          : [];
+      this.tracks = results?.tracks?.items?.length
+        ? results.tracks.items.filter(Boolean).map((track: any) => ({
+            id: track?.id ?? "",
+            name: track?.name ?? "",
+            artists: track?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
+            album: track?.album?.name ?? "",
+            images: track?.album?.images ?? [],
+          }))
+        : [];
     });
   }
 
