@@ -42,6 +42,7 @@ export class SearchPageComponent implements OnDestroy {
             name: album?.name ?? "",
             artists: album?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
             images: album?.images ?? [],
+            type: album?.type ?? "album",
           }))
         : [];
       
@@ -50,6 +51,7 @@ export class SearchPageComponent implements OnDestroy {
             id: artist?.id ?? "",
             name: artist?.name ?? "",
             images: artist?.images ?? [],
+            type: artist?.type ?? "artist",
           }))
         : [];
 
@@ -58,6 +60,7 @@ export class SearchPageComponent implements OnDestroy {
             id: playlist?.id ?? "",
             name: playlist?.name ?? "",
             images: playlist?.images ?? [],
+            type: playlist?.type ?? "playlist",
           }))
         : [];
 
@@ -68,6 +71,7 @@ export class SearchPageComponent implements OnDestroy {
             artists: track?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
             album: track?.album?.name ?? "",
             images: track?.album?.images ?? [],
+            type: track?.type ?? "track",
           }))
         : [];
     });
