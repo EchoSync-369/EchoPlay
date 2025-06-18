@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carousel',
@@ -15,9 +16,16 @@ export class CarouselComponent {
 
   numVisible: number;
 
-  constructor() {
+  constructor(private router: Router) {
     this.numVisible = this.getNumVisible();
     window.addEventListener('resize', this.onResize.bind(this));
+  }
+
+  onCardClick(card: { type: string; id: string } | undefined): void {
+    if (card && card.type && card.id) {
+      this.router.navigate(['/player', card.type, card.id]);
+      console.log("Selected Card", card);
+    }
   }
 
   private getNumVisible() {

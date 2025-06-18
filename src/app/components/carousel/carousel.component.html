@@ -6,7 +6,7 @@
   [autoplayInterval]="5000"
 >
   <ng-template pTemplate="item" let-data>
-    <div class="carousel-album-card">
+    <div class="carousel-album-card" (click)="onCardClick(data)" style="cursor:pointer;">
       <img
         [src]="
           (data.images && data.images.length > 0 && data.images[0].url) ?
