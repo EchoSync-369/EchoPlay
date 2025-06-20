@@ -17,4 +17,6 @@ body {
   background: var(--background-color);
   color: var(--text-color);
   transition: background 0.2s, color 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
 }

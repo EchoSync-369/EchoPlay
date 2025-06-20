@@ -40,6 +40,10 @@ export class AppComponent {
     this.themeService.initTheme();
   }
 
+  navigateTo(path: string) {
+    this.router.navigate([path === 'home' ? '/' : '/' + path]);
+  }
+
   handleSearch(query: string) {
     this.router.navigate(["/search/" + query]);
   }
