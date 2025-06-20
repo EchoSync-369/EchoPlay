@@ -3,6 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
+import { ThemeService } from "../../services/themes/theme.service";
 
 @Component({
   selector: "app-search-bar",
@@ -13,6 +14,8 @@ import { ButtonModule } from "primeng/button";
 })
 export class SearchBarComponent {
   private _searchTerm = "";
+
+  constructor(public themeService: ThemeService) { }
 
   @Input()
   get searchTerm(): string {
