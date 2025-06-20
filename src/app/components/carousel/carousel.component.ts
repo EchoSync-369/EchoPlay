@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { Router } from '@angular/router';
+import { ThemeService } from '../../services/themes/theme.service';
 
 @Component({
   selector: 'app-carousel',
@@ -11,14 +12,17 @@ import { Router } from '@angular/router';
   styleUrl: './carousel.component.css'
 })
 
-export class CarouselComponent implements OnDestroy {
+export class CarouselComponent implements OnInit, OnDestroy {
   @Input() data: any[] = [];
 
   numVisible: number;
   responsiveOptions: any[];
+  isDarkMode: boolean = false;
+  constructor(private router: Router, private themeService: ThemeService) {
+    this.numVisible = this.getNumVisible();
+    this.isDarkMode = this.themeService.isDarkMode();
 
-  constructor(private router: Router) {
-    this.numVisible = this.getNumVisible(); this.responsiveOptions = [
+    this.responsiveOptions = [
       {
         breakpoint: '1200px',
         numVisible: 3,
@@ -37,21 +41,48 @@ export class CarouselComponent implements OnDestroy {
     ];
     window.addEventListener('resize', this.onResize.bind(this));
   }
+  ngOnInit(): void {
+    this.updateTheme();
+    this.observeThemeChanges();
+  }
+
+  private observeThemeChanges(): void {
+    const observer = new MutationObserver(() => {
+      this.updateTheme();
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    (this as any).themeObserver = observer;
+  }
 
   onCardClick(card: { type: string; id: string } | undefined): void {
     if (card && card.type && card.id) {
       this.router.navigate(['/player', card.type, card.id]);
       console.log("Selected Card", card);
     }
-  } private getNumVisible() {
-    const width = window.innerWidth;
+  }
 
-    // Calculate based on new wider card width (260px) + margins (16px) + some padding
+  getCurrentTheme(): string {
+    return this.isDarkMode ? 'dark' : 'light';
+  }
+  updateTheme(): void {
+    this.isDarkMode = this.themeService.isDarkMode();
+  }
+
+  refreshTheme(): void {
+    this.updateTheme();
+  }
+
+  private getNumVisible() {
+    const width = window.innerWidth;
     const cardWidth = 260 + 16;
-    const availableWidth = width - 120; // Reserve space for navigation buttons
+    const availableWidth = width - 120;
     const maxCards = Math.floor(availableWidth / cardWidth);
 
-    // Responsive breakpoints as fallback with updated values for wider cards
     if (width < 600) {
       return Math.min(1, maxCards);
     } else if (width < 900) {
@@ -70,8 +101,11 @@ export class CarouselComponent implements OnDestroy {
   private onResize() {
     this.numVisible = this.getNumVisible();
   }
-
   ngOnDestroy() {
     window.removeEventListener('resize', this.onResize.bind(this));
+
+    if ((this as any).themeObserver) {
+      (this as any).themeObserver.disconnect();
+    }
   }
 }

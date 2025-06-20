@@ -9,6 +9,8 @@
   <ng-template pTemplate="item" let-data>
     <div
       class="carousel-album-card"
+      [class.dark-theme]="isDarkMode"
+      [class.light-theme]="!isDarkMode"
       (click)="onCardClick(data)"
       style="cursor: pointer"
     >
