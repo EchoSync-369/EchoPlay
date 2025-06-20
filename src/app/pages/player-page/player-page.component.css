@@ -1,0 +1,127 @@
+.player-container {
+  height: 100vh;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.spotify-player {
+  border-radius: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.spotify-player.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top: 3px solid var(--primary-color, #1db954);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.player-container.light-theme {
+  background-color: var(--background-color, #ffffff);
+}
+
+.light-theme .spotify-player.active {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.player-container.dark-theme {
+  background-color: var(--background-color, #181818);
+}
+
+.dark-theme .spotify-player.active {
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-container.loading .spotify-player {
+  opacity: 0.7;
+}
+
+.spotify-player:not(.active) {
+  visibility: hidden;
+}
+
+.spotify-player.active {
+  visibility: visible;
+}
+
+.player-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  background: var(--background-color);
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.player-container.theme-changing::before {
+  opacity: 0.1;
+}
+
+@media (max-width: 768px) {
+  .player-container {
+    height: 100vh;
+    padding: 0;
+  }
+
+  .spotify-player {
+    border-radius: 8px;
+  }
+}
+
+.spotify-player[src=""] {
+  opacity: 0.5;
+  background-color: var(--background-color);
+}
+
+.spotify-player:focus {
+  outline: 2px solid var(--primary-color, #1db954);
+  outline-offset: 2px;
+}
