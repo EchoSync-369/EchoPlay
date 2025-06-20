@@ -1,10 +1,24 @@
-<div class="theme-button-container">
-  <app-theme-button></app-theme-button>
+<div class="navbar">
+  <div class="left">
+    <div class="nav-buttons">
+      <button class="icon-button" (click)="navigateTo('home')" title="Home">
+        <i class="pi pi-home"></i>
+      </button>
+    </div>
+  </div>
+  <div class="center">
+    <div class="search-wrapper" *ngIf="showSearchBar">
+      <app-search-bar
+        [(searchTerm)]="searchText"
+        (search)="handleSearch($event)"
+      ></app-search-bar>
+    </div>
+  </div>
+  <div class="right">
+    <div class="theme-button-container">
+      <app-theme-button></app-theme-button>
+    </div>
+  </div>
 </div>
-<div class="search-wrapper" *ngIf="showSearchBar">
-  <app-search-bar
-    [(searchTerm)]="searchText"
-    (search)="handleSearch($event)"
-  ></app-search-bar>
-</div>
+
 <router-outlet></router-outlet>

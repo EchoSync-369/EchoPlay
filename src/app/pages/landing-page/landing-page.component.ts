@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { environment } from "../../../app/environments/environment";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: "app-landing-page",
   standalone: true,
-  imports: [],
+  imports: [ButtonModule],
   templateUrl: "./landing-page.component.html",
   styleUrl: "./landing-page.component.css",
 })
