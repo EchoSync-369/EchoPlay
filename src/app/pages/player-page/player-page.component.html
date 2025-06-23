@@ -1,7 +1,31 @@
-<div style="height: 100vh">
+<div
+  class="player-container"
+  [ngClass]="{
+    'dark-theme': isDarkMode,
+    'light-theme': !isDarkMode,
+    loading: isLoading
+  }"
+>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+  </div>
+
   <iframe
-    style="border-radius: 12px"
-    [src]="iframeSrc"
+    class="spotify-player light-player"
+    [class.active]="!isDarkMode && !isLoading"
+    [src]="lightIframeSrc"
+    width="100%"
+    height="100%"
+    frameBorder="0"
+    allowfullscreen=""
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy"
+  ></iframe>
+
+  <iframe
+    class="spotify-player dark-player"
+    [class.active]="isDarkMode && !isLoading"
+    [src]="darkIframeSrc"
     width="100%"
     height="100%"
     frameBorder="0"
