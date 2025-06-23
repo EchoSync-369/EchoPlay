@@ -1,3 +1,24 @@
+:host {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.p-carousel {
+  width: 100%;
+}
+
+.p-carousel .p-carousel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-carousel .p-carousel-container {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
 .song-card {
   display: flex;
   flex-direction: column;
@@ -12,30 +33,53 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 1rem;
-  background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+  padding: 1rem 1rem 1.5rem 1rem;
   border-radius: 18px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
+  width: 260px;
+  height: 340px;
+  margin: 16px 8px 0 8px;
+  will-change: transform;
+  flex-shrink: 0;
+}
+
+.carousel-album-card.light-theme {
+  background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
   box-shadow: 0 4px 24px 0 rgba(80, 80, 180, 0.1),
     0 1.5px 6px 0 rgba(80, 80, 180, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-  min-width: 220px;
-  max-width: 240px;
-  margin: 0 auto;
 }
 
-.album-art {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 2px 12px 0 rgba(80, 80, 180, 0.1);
-}
-
-.carousel-album-card:hover {
+.carousel-album-card.light-theme:hover {
   transform: translateY(-8px) scale(1.04);
   box-shadow: 0 8px 32px 0 rgba(80, 80, 180, 0.18),
     0 2px 8px 0 rgba(80, 80, 180, 0.12);
+}
+
+.carousel-album-card.dark-theme {
+  background: linear-gradient(135deg, #1e293b 60%, #334155 100%);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.3), 0 1.5px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.carousel-album-card.dark-theme:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 2px 8px 0 rgba(0, 0, 0, 0.25);
+}
+
+.album-art {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.carousel-album-card.light-theme .album-art {
+  box-shadow: 0 3px 16px 0 rgba(80, 80, 180, 0.15);
+}
+
+.carousel-album-card.dark-theme .album-art {
+  box-shadow: 0 3px 16px 0 rgba(0, 0, 0, 0.4);
 }
 
 h3 {
@@ -44,11 +88,24 @@ h3 {
 }
 
 .album-title {
-  margin: 0.5rem 0 0.2rem 0;
-  font-size: 1.15rem;
+  margin: 0.25rem 0 0.1rem 0;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #2d2d4d;
   text-align: center;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.carousel-album-card.light-theme .album-title {
+  color: #2d2d4d;
+}
+
+.carousel-album-card.dark-theme .album-title {
+  color: #f1f5f9;
 }
 
 p {
@@ -59,22 +116,90 @@ p {
 
 .album-artist {
   margin: 0;
-  color: #5a5a89;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-align: center;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.carousel-album-card.light-theme .album-artist {
+  color: #5a5a89;
+}
+
+.carousel-album-card.dark-theme .album-artist {
+  color: #94a3b8;
 }
 
 .p-carousel .p-carousel-indicators .p-carousel-indicator {
-  background: #b3b3e6;
   border-radius: 50%;
   width: 12px;
   height: 12px;
   margin: 0 4px;
-  transition: background 0.2s;
+  transition: background 0.3s ease;
 }
 
-.p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight {
+:host-context(.light-mode)
+  .p-carousel
+  .p-carousel-indicators
+  .p-carousel-indicator,
+:host .p-carousel .p-carousel-indicators .p-carousel-indicator {
+  background: #b3b3e6;
+}
+
+:host-context(.light-mode)
+  .p-carousel
+  .p-carousel-indicators
+  .p-carousel-indicator.p-highlight,
+:host .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight {
   background: #6366f1;
+}
+
+:host-context(.dark-mode)
+  .p-carousel
+  .p-carousel-indicators
+  .p-carousel-indicator {
+  background: #475569;
+}
+
+:host-context(.dark-mode)
+  .p-carousel
+  .p-carousel-indicators
+  .p-carousel-indicator.p-highlight {
+  background: #818cf8;
+}
+
+:host-context(.light-mode) .p-carousel .p-carousel-prev,
+:host-context(.light-mode) .p-carousel .p-carousel-next,
+:host .p-carousel .p-carousel-prev,
+:host .p-carousel .p-carousel-next {
+  background: rgba(255, 255, 255, 0.9);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+:host-context(.light-mode) .p-carousel .p-carousel-prev:hover,
+:host-context(.light-mode) .p-carousel .p-carousel-next:hover,
+:host .p-carousel .p-carousel-prev:hover,
+:host .p-carousel .p-carousel-next:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+:host-context(.dark-mode) .p-carousel .p-carousel-prev,
+:host-context(.dark-mode) .p-carousel .p-carousel-next {
+  background: rgba(30, 41, 59, 0.9);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+:host-context(.dark-mode) .p-carousel .p-carousel-prev:hover,
+:host-context(.dark-mode) .p-carousel .p-carousel-next:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #f1f5f9;
 }
 
 .p-mb-3 {
