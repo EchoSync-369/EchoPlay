@@ -5,7 +5,9 @@
   padding: 0.75rem 1.5rem;
 }
 
-.left, .center, .right {
+.left,
+.center,
+.right {
   flex: 1;
   display: flex;
   align-items: center;
@@ -21,20 +23,79 @@
 
 .nav-buttons {
   display: flex;
-  gap: .75rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.theme-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  /* padding: 0.5rem; */
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: relative;
 }
 
-.icon-button:hover {
+.icon-button i {
+  font-size: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.icon-button i {
+  color: #4f46e5;
+}
+
+.icon-button:hover i {
   transform: scale(1.2);
+  color: #3730a3;
+  text-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+:host-context(.dark-mode) .icon-button i {
+  color: #818cf8;
+}
+
+:host-context(.dark-mode) .icon-button:hover i {
+  color: #a5b4fc;
+  text-shadow: 0 2px 8px rgba(129, 140, 248, 0.4);
+}
+
+.icon-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.icon-button:focus-visible i {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .icon-button i {
+    font-size: 2rem;
+  }
+
+  .theme-button-container button i {
+    font-size: 2rem;
+  }
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
