@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { Router, RouterOutlet, ActivatedRoute } from "@angular/router";
 import { ThemeService } from "./services/themes/theme.service";
-import { ThemeButtonComponent } from "./components/theme-button/theme-button.component";
-import { SearchBarComponent } from "./components/search-bar/search-bar.component";
+import { NavbarComponent } from "./components/navbar/navbar.component";
 import { CommonModule } from "@angular/common";
 
 @Component({
@@ -11,8 +10,7 @@ import { CommonModule } from "@angular/common";
   imports: [
     RouterOutlet,
     CommonModule,
-    ThemeButtonComponent,
-    SearchBarComponent,
+    NavbarComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
@@ -38,13 +36,5 @@ export class AppComponent {
 
   ngOnInit() {
     this.themeService.initTheme();
-  }
-
-  navigateTo(path: string) {
-    this.router.navigate([path === 'home' ? '/' : '/' + path]);
-  }
-
-  handleSearch(query: string) {
-    this.router.navigate(["/search/" + query]);
   }
 }
