@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
 import { CarouselComponent } from "../../components/carousel/carousel.component";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
 import { Album } from "../../models/album";
+import { ButtonModule } from "primeng/button";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [CarouselComponent],
+  imports: [CarouselComponent, ButtonModule],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
@@ -28,5 +28,9 @@ export class HomeComponent implements OnInit {
   handleSearch(query: string) {
     console.log("Searching for:", query);
     this.router.navigate(["/search/" + query]);
+  }
+
+  openSpotify() {
+    window.open('https://open.spotify.com/', '_blank');
   }
 }

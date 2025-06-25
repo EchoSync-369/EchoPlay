@@ -47,12 +47,9 @@
 }
 
 .icon-button i {
-  /* font-size: 2.5rem; */
   transition: all 0.3s ease;
-}
-
-.icon-button i {
   color: #4f46e5;
+  font-size: large;
 }
 
 .icon-button:hover i {
