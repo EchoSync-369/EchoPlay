@@ -1,0 +1,1 @@
+:root{--background-color: #fff;--text-color: #222;--primary-color: #1db954}body.dark-mode{--background-color: #181818;--text-color: #eee;--primary-color: #1db954}body{background:var(--background-color);color:var(--text-color);transition:background .2s,color .2s;font-family:Montserrat,sans-serif;font-size:14px}
