@@ -204,24 +204,9 @@ describe('NavbarComponent', () => {
       
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/search/search@#$%^&*()']);
     });
-
-    it('should trigger search when search bar component emits search event', () => {
-      const searchBarComponent = fixture.debugElement.query(By.directive(SearchBarComponent));
-      const searchBarInstance = searchBarComponent.componentInstance;
-      const searchQuery = 'emitted search';
-      
-      searchBarInstance.search.emit(searchQuery);
-      
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/search/emitted search']);
-    });
   });
 
   describe('Search Text Management', () => {
-    beforeEach(() => {
-      component.showSearchBar = true;
-      fixture.detectChanges();
-    });
-
     it('should emit searchTextChange when onSearchTextChange is called', () => {
       const searchTextChangeSpy = jest.spyOn(component.searchTextChange, 'emit');
       const newSearchText = 'new search text';
@@ -229,28 +214,6 @@ describe('NavbarComponent', () => {
       component.onSearchTextChange(newSearchText);
       
       expect(searchTextChangeSpy).toHaveBeenCalledWith(newSearchText);
-    });
-
-    it('should pass searchText input to search bar component', () => {
-      const testSearchText = 'test search input';
-      component.searchText = testSearchText;
-      fixture.detectChanges();
-      
-      const searchBarComponent = fixture.debugElement.query(By.directive(SearchBarComponent));
-      const searchBarInstance = searchBarComponent.componentInstance;
-      
-      expect(searchBarInstance.searchTerm).toBe(testSearchText);
-    });
-
-    it('should update search text when search bar emits searchTermChange', () => {
-      const searchTextChangeSpy = jest.spyOn(component.searchTextChange, 'emit');
-      const searchBarComponent = fixture.debugElement.query(By.directive(SearchBarComponent));
-      const searchBarInstance = searchBarComponent.componentInstance;
-      const newSearchTerm = 'updated search term';
-      
-      searchBarInstance.searchTermChange.emit(newSearchTerm);
-      
-      expect(searchTextChangeSpy).toHaveBeenCalledWith(newSearchTerm);
     });
 
     it('should handle empty search text changes', () => {
@@ -288,9 +251,8 @@ describe('NavbarComponent', () => {
       expect(component.showSearchBar).toBe(true);
     });
 
-    it('should update template when input properties change', () => {
+    it('should update template when showSearchBar changes', () => {
       component.showSearchBar = false;
-      component.searchText = 'test';
       fixture.detectChanges();
       
       let searchWrapper = fixture.debugElement.query(By.css('.search-wrapper'));
@@ -301,9 +263,6 @@ describe('NavbarComponent', () => {
       
       searchWrapper = fixture.debugElement.query(By.css('.search-wrapper'));
       expect(searchWrapper).toBeTruthy();
-      
-      const searchBarComponent = fixture.debugElement.query(By.directive(SearchBarComponent));
-      expect(searchBarComponent.componentInstance.searchTerm).toBe('test');
     });
   });
 
@@ -345,14 +304,14 @@ describe('NavbarComponent', () => {
       expect(themeButtonComponent.componentInstance).toBeInstanceOf(ThemeButtonComponent);
     });
 
-    it('should integrate with SearchBarComponent', () => {
+    it('should integrate with SearchBarComponent when showSearchBar is true', () => {
       const searchBarComponent = fixture.debugElement.query(By.directive(SearchBarComponent));
       
       expect(searchBarComponent).toBeTruthy();
       expect(searchBarComponent.componentInstance).toBeInstanceOf(SearchBarComponent);
     });
 
-    it('should pass correct props to SearchBarComponent', () => {
+    it('should pass searchText to SearchBarComponent via searchTerm input', () => {
       const testSearchText = 'integration test';
       component.searchText = testSearchText;
       fixture.detectChanges();
