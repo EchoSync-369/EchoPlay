@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { Album } from "../../models/album";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class SpotifyApiService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   get headers(): HttpHeaders {
     const token = localStorage.getItem("access_token") || "";
@@ -61,7 +62,7 @@ export class SpotifyApiService {
           if (err.status === 401) {
             localStorage.removeItem("access_token");
             this.router.navigate(['/landing']);
-          } 
+          }
           p0([]);
         },
       });
@@ -84,12 +85,42 @@ export class SpotifyApiService {
         },
         error: (err) => {
           console.error("Search error:", err);
-            if (err.status === 401) {
+          if (err.status === 401) {
             localStorage.removeItem("access_token");
             this.router.navigate(['/landing']);
-            } 
+          }
           p0(null);
         },
       });
   }
+
+  private readonly REDIRECT_URI = 'http://127.0.0.1:4200/test';
+  private readonly SCOPES = 'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state';
+
+  initiateUserAuth(): void {
+    const authUrl = `https://accounts.spotify.com/authorize?` +
+      `client_id=${environment.clientId}&` +
+      `response_type=code&` +
+      `redirect_uri=${encodeURIComponent(this.REDIRECT_URI)}&` +
+      `scope=${encodeURIComponent(this.SCOPES)}`;
+
+    window.location.href = authUrl;
+  }
+
+  exchangeCodeForToken(code: string): Observable<any> {
+    const body = new HttpParams()
+      .set('grant_type', 'authorization_code')
+      .set('code', code)
+      .set('redirect_uri', this.REDIRECT_URI)
+      .set('client_id', environment.clientId)
+      .set('client_secret', environment.clientSecret);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>('https://accounts.spotify.com/api/token', body, { headers });
+  }
+
+
 }
