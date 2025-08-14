@@ -94,7 +94,7 @@ export class SpotifyApiService {
       });
   }
 
-  private readonly REDIRECT_URI = 'http://127.0.0.1:4200/test';
+  private readonly REDIRECT_URI = environment.redirecturi;
   private readonly SCOPES = 'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state';
 
   initiateUserAuth(): void {
