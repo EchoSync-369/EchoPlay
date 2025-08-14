@@ -43,3 +43,12 @@ Thumbs.db
 
 # Environments
 src/app/environments/
+
+# Certificates
+localhost.conf
+localhost.pem
+localhost-key.pem
+*.pem
+*.key
+*.crt
+*.csr

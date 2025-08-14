@@ -5,6 +5,7 @@ import { SpotifyAuthGuard } from "./services/auth/spotify-auth.guard";
 import { UnauthGuard } from "./services/unauth/unauth.guard";
 import { SearchPageComponent } from "./pages/search-page/search-page.component";
 import { PlayerPageComponent } from "./pages/player-page/player-page.component";
+import { TestPageComponent } from "./pages/test-page/test-page.component";
 
 export const routes: Routes = [
   // Redirect to the landing page on base path
@@ -18,6 +19,13 @@ export const routes: Routes = [
   {
     path: "landing",
     component: LandingPageComponent,
+    canActivate: [UnauthGuard],
+    data: { showSearchBar: false },
+  },
+
+  {
+    path: "test",
+    component: TestPageComponent,
     canActivate: [UnauthGuard],
     data: { showSearchBar: false },
   },
