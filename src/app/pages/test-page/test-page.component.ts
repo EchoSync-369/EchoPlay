@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify-api/spotify-api.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-test',
@@ -32,7 +33,8 @@ export class TestPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private spotifyApi: SpotifyApiService,
-    private router: Router
+    private router: Router,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit() {
@@ -51,12 +53,22 @@ export class TestPageComponent implements OnInit {
         this.isAuthenticating = true;
         this.spotifyApi.exchangeCodeForToken(code).subscribe({
           next: (response) => {
-            localStorage.setItem('access_token', response.access_token);
-            if (response.refresh_token) {
-              localStorage.setItem('refresh_token', response.refresh_token);
-            }
-            this.authResult = 'Authentication successful!';
-            this.isAuthenticating = false;
+            // Example POST to backend with credentials
+            this.httpClient.post(
+              "https://192.168.1.111:7244/api/auth/login", // replace with your actual backend endpoint
+              { token: response.access_token }, // example body, adjust as needed
+              { withCredentials: true }
+            ).subscribe({
+              next: (res) => console.log('Backend response:', res),
+              error: (err) => console.error('Backend error:', err)
+            });
+            // localStorage.setItem('access_token', response.access_token);
+            // if (response.refresh_token) {
+            //   localStorage.setItem('refresh_token', response.refresh_token);
+            // }
+            // this.authResult = 'Authentication successful!';
+            // this.isAuthenticating = false;
+
             
             // Optionally redirect to home after a delay
             setTimeout(() => {
