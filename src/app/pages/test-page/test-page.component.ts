@@ -55,12 +55,23 @@ export class TestPageComponent implements OnInit {
           next: (response) => {
             // Example POST to backend with credentials
             this.httpClient.post(
-              "https://192.168.1.111:7244/api/auth/login", // replace with your actual backend endpoint
-              { token: response.access_token }, // example body, adjust as needed
+              "https://localhost:7244/api/auth/login",
+              { token: response.access_token }, // example body
               { withCredentials: true }
             ).subscribe({
-              next: (res) => console.log('Backend response:', res),
-              error: (err) => console.error('Backend error:', err)
+              next: (res) => {
+                this.authResult = 'Authentication successful!';
+                this.isAuthenticating = false;
+                
+                // Store the JWT token
+                if ((res as any).token) {
+                  localStorage.setItem('jwt_token', (res as any).token);
+                }
+              },
+              error: (err) => {
+                this.authResult = 'Backend authentication failed';
+                this.isAuthenticating = false;
+              }
             });
             // localStorage.setItem('access_token', response.access_token);
             // if (response.refresh_token) {
@@ -85,7 +96,14 @@ export class TestPageComponent implements OnInit {
     });
   }
 
-  initiateAuth() {
-    this.spotifyApi.initiateUserAuth();
+  initiateAuth() {   
+    try {
+      console.log('Calling spotifyApi.initiateUserAuth()...');
+      this.spotifyApi.initiateUserAuth();
+      console.log('initiateUserAuth() call completed');
+    } catch (error) {
+      console.error('Error initiating auth:', error);
+      this.authResult = 'Error starting auth: ' + error;
+    }
   }
 }
