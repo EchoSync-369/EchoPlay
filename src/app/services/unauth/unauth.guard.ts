@@ -8,7 +8,7 @@ export class UnauthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("jwt_token");
     if (token) {
       this.router.navigate(["/home"]);
       return false;

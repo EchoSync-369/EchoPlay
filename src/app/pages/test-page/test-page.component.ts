@@ -53,6 +53,7 @@ export class TestPageComponent implements OnInit {
         this.isAuthenticating = true;
         this.spotifyApi.exchangeCodeForToken(code).subscribe({
           next: (response) => {
+            localStorage.setItem("access_token", response.access_token)
             // Example POST to backend with credentials
             this.httpClient.post(
               "https://localhost:7244/api/auth/login",
@@ -60,12 +61,14 @@ export class TestPageComponent implements OnInit {
               { withCredentials: true }
             ).subscribe({
               next: (res) => {
+                console.log(res)
                 this.authResult = 'Authentication successful!';
                 this.isAuthenticating = false;
                 
                 // Store the JWT token
                 if ((res as any).token) {
                   localStorage.setItem('jwt_token', (res as any).token);
+                  localStorage.setItem('IsAdmin', (res as any).isAdmin ? 'true' : 'false');
                 }
               },
               error: (err) => {
