@@ -19,6 +19,13 @@
 
 .right {
   justify-content: flex-end;
+  gap: 1rem;
+}
+
+.add-to-favorites-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-buttons {
@@ -95,4 +102,25 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+}
+
+/* Bookmark-specific button styling */
+.icon-button .pi-bookmark {
+  color: #6366f1;
+}
+
+.icon-button:hover .pi-bookmark {
+  color: #4f46e5;
+  transform: scale(1.1);
+}
+
+.favorites-demo-btn {
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+  color: white;
+  border-radius: 6px;
+}
+
+.favorites-demo-btn:hover {
+  background: linear-gradient(135deg, #1ed760 0%, #17a244 100%);
+  transform: translateY(-1px);
 }

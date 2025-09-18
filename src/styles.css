@@ -1,15 +1,28 @@
+/* Import PrimeNG Icons */
+@import 'primeicons/primeicons.css';
+
 /* Light theme (default) */
 :root {
   --background-color: #fff;
   --text-color: #222;
+  --text-color-secondary: #666;
   --primary-color: #1db954;
+  --surface-card: #ffffff;
+  --surface-ground: #f8f9fa;
+  --surface-section: #ffffff;
+  --surface-border: #dee2e6;
 }
 
 /* Dark theme */
 body.dark-mode {
   --background-color: #181818;
   --text-color: #eee;
+  --text-color-secondary: #aaa;
   --primary-color: #1db954;
+  --surface-card: #2a2a2a;
+  --surface-ground: #181818;
+  --surface-section: #2a2a2a;
+  --surface-border: #3e3e3e;
 }
 
 /* Apply variables */

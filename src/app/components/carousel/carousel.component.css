@@ -41,6 +41,21 @@
   margin: 16px 8px 0 8px;
   will-change: transform;
   flex-shrink: 0;
+  position: relative; /* Add relative positioning for absolute child */
+}
+
+/* Favorites button container */
+.favorites-button-container {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.carousel-album-card:hover .favorites-button-container {
+  opacity: 1;
 }
 
 .carousel-album-card.light-theme {
