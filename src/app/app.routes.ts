@@ -17,15 +17,15 @@ export const routes: Routes = [
   },
 
   // "Unauthenticated" route for the landing page
-  {
-    path: "landing",
-    component: LandingPageComponent,
-    canActivate: [UnauthGuard],
-    data: { showSearchBar: false },
-  },
+  // {
+  //   path: "landing",
+  //   component: LandingPageComponent,
+  //   canActivate: [UnauthGuard],
+  //   data: { showSearchBar: false },
+  // },
 
   {
-    path: "test",
+    path: "landing",
     component: TestPageComponent,
     canActivate: [UnauthGuard],
     data: { showSearchBar: false },

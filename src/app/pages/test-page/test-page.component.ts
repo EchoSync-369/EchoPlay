@@ -69,6 +69,7 @@ export class TestPageComponent implements OnInit {
                 if ((res as any).token) {
                   localStorage.setItem('jwt_token', (res as any).token);
                   localStorage.setItem('IsAdmin', (res as any).isAdmin ? 'true' : 'false');
+                  localStorage.setItem('User', JSON.stringify((res as any).profile));
                 }
               },
               error: (err) => {
