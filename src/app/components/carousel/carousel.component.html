@@ -14,6 +14,17 @@
       (click)="onCardClick(data)"
       style="cursor: pointer"
     >
+      <!-- Add to Favorites Button -->
+      <div class="favorites-button-container" (click)="$event.stopPropagation()">
+        <app-add-to-favorites
+          [spotifyId]="data.id"
+          [entityType]="getEntityType(data)"
+          [metadata]="getMetadata(data)"
+          [size]="'small'"
+          (favoriteToggled)="onFavoriteToggle($event)">
+        </app-add-to-favorites>
+      </div>
+
       <img
         [src]="
           data.images && data.images.length > 0 && data.images[0].url

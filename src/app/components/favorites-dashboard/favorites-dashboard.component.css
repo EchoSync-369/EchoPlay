@@ -1,0 +1,626 @@
+.favorites-dashboard {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.dashboard-subtitle {
+  color: var(--text-color-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Summary Cards - Theme-aware styling */
+.summary-card {
+  --p-card-body-padding: 1.25rem;
+  --p-card-background: var(--surface-card);
+  --p-card-border: 1px solid var(--surface-border);
+  --p-card-shadow: var(--card-shadow);
+}
+
+.stat-content {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Controls Section */
+.dashboard-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.sorting-section {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.sort-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.sort-dropdown {
+  min-width: 180px;
+}
+
+.sort-order-buttons {
+  min-width: 200px;
+}
+
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.view-controls label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Loading and Empty States */
+.loading-container, .empty-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+}
+
+.empty-content, .error-content {
+  max-width: 400px;
+}
+
+.empty-content h2, .error-content h2 {
+  margin: 1.5rem 0 1rem 0;
+  color: var(--text-color);
+}
+
+.empty-content p, .error-content p {
+  color: var(--text-color-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* List View */
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* List Item Cards - Theme-aware styling */
+.favorite-list-item {
+  --p-card-body-padding: 1.25rem;
+  --p-card-background: var(--surface-card);
+  --p-card-border: 1px solid var(--surface-border);
+  --p-card-shadow: var(--card-shadow);
+}
+
+/* Clickable card styling */
+.clickable-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clickable-card:hover {
+  --p-card-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.list-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: var(--card-shadow);
+}
+
+.item-fallback {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background: var(--surface-ground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color-secondary);
+  font-size: 1.5rem;
+  border: 1px solid var(--surface-border);
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.meta-text {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.item-date {
+  color: var(--text-color-secondary);
+  font-size: 0.75rem;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Grid View */
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+/* Carousel-style card styling for grid view */
+.favorite-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1rem 1.5rem 1rem;
+  border-radius: 18px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
+  width: 260px;
+  height: 340px;
+  will-change: transform;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.favorite-card.light-theme {
+  background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+  box-shadow: var(--card-shadow);
+}
+
+.favorite-card.light-theme:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.favorite-card.dark-theme {
+  background: linear-gradient(135deg, #1e293b 60%, #334155 100%);
+  box-shadow: var(--card-shadow);
+}
+
+.favorite-card.dark-theme:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.album-art {
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.album-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  color: var(--text-color);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.album-artist {
+  font-size: 0.95rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+  opacity: 0.8;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* Favorites button container */
+.favorites-button-container {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  padding: 0.25rem;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--card-shadow);
+}
+
+.favorites-button-container:hover {
+  background: rgba(220, 38, 38, 0.9);
+  transform: scale(1.1);
+}
+
+.favorite-card:hover .favorites-button-container {
+  opacity: 1;
+}
+
+/* Style the delete button inside the container */
+.favorites-button-container .p-button {
+  --p-button-padding-y: 0.5rem;
+  --p-button-padding-x: 0.5rem;
+  --p-button-icon-only-width: 2.5rem;
+  --p-button-icon-only-width: 2.5rem;
+  --p-button-sm-icon-only-width: 2.25rem;
+  --p-button-sm-icon-only-height: 2.25rem;
+  border: none;
+  background: transparent !important;
+  color: white !important;
+  font-size: 1rem;
+}
+
+.favorites-button-container .p-button:hover {
+  background: transparent !important;
+  color: white !important;
+  transform: none;
+}
+
+/* Entity type badge */
+.entity-badge-container {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10;
+}
+
+/* Category tag at bottom */
+.category-tag {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.favorite-card:hover .category-tag {
+  opacity: 1;
+}
+
+/* Grid Item Cards - Theme-aware styling */
+.favorite-grid-item {
+  --p-card-body-padding: 0;
+  --p-card-content-padding: 1rem;
+  --p-card-footer-padding: 1rem;
+  --p-card-background: var(--surface-card);
+  --p-card-border: 1px solid var(--surface-border);
+  --p-card-shadow: var(--card-shadow);
+  height: 100%;
+}
+
+.grid-card-header {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.grid-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--surface-ground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color-secondary);
+  font-size: 2rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.entity-badge {
+  backdrop-filter: blur(4px);
+}
+
+/* Theme-specific entity badge styling */
+body:not(.dark-mode) .entity-badge {
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: white !important;
+}
+
+body.dark-mode .entity-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+}
+
+.grid-card-content {
+  padding: 1rem;
+  background: var(--surface-card);
+}
+
+.grid-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grid-subtitle, .grid-album {
+  margin: 0.25rem 0;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.grid-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid var(--surface-border);
+  background: var(--surface-card);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .favorites-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .sorting-section {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .view-controls {
+    justify-content: center;
+  }
+
+  .summary-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list-item-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .item-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .item-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-card-header {
+    height: 150px;
+  }
+}
+
+/* Enhanced PrimeNG Component Theme Integration */
+:host ::ng-deep {
+  /* Ensure all PrimeNG cards use our theme variables */
+  .p-card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    color: var(--text-color);
+    box-shadow: var(--card-shadow);
+  }
+
+  .p-card .p-card-body {
+    background: var(--surface-card);
+    color: var(--text-color);
+  }
+
+  .p-card .p-card-content {
+    background: var(--surface-card);
+    color: var(--text-color);
+  }
+
+  .p-card .p-card-footer {
+    background: var(--surface-card);
+    border-top: 1px solid var(--surface-border);
+  }
+
+  /* Dropdown theme integration */
+  .p-dropdown {
+    background: var(--surface-card) !important;
+    border: 1px solid var(--surface-border) !important;
+    color: var(--text-color) !important;
+  }
+
+  .p-dropdown .p-dropdown-label {
+    color: var(--text-color) !important;
+  }
+
+  /* Button theme integration */
+  .p-selectbutton .p-button {
+    background: var(--surface-card) !important;
+    border: 1px solid var(--surface-border) !important;
+    color: var(--text-color) !important;
+  }
+
+  .p-selectbutton .p-button.p-highlight {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+  }
+
+  /* Tag theme integration */
+  .p-tag {
+    color: white !important;
+  }
+
+  /* Progress spinner theme */
+  .p-progress-spinner-circle {
+    stroke: var(--primary-color) !important;
+  }
+
+  /* Confirmation dialog theme */
+  .p-dialog {
+    background: var(--surface-card) !important;
+    border: 1px solid var(--surface-border) !important;
+    color: var(--text-color) !important;
+  }
+
+  .p-dialog .p-dialog-header {
+    background: var(--surface-card) !important;
+    color: var(--text-color) !important;
+    border-bottom: 1px solid var(--surface-border) !important;
+  }
+
+  .p-dialog .p-dialog-content {
+    background: var(--surface-card) !important;
+    color: var(--text-color) !important;
+  }
+
+  .p-dialog .p-dialog-footer {
+    background: var(--surface-card) !important;
+    border-top: 1px solid var(--surface-border) !important;
+  }
+}

@@ -124,5 +124,26 @@ export class SpotifyApiService {
     return this.http.post<any>('https://accounts.spotify.com/api/token', body, { headers });
   }
 
+  // Get track details by ID
+  getTrack(trackId: string): Observable<any> {
+    return this.http.get<any>(`https://api.spotify.com/v1/tracks/${trackId}`, {
+      headers: this.headers
+    });
+  }
+
+  // Get album details by ID
+  getAlbum(albumId: string): Observable<any> {
+    return this.http.get<any>(`https://api.spotify.com/v1/albums/${albumId}`, {
+      headers: this.headers
+    });
+  }
+
+  // Get artist details by ID
+  getArtist(artistId: string): Observable<any> {
+    return this.http.get<any>(`https://api.spotify.com/v1/artists/${artistId}`, {
+      headers: this.headers
+    });
+  }
+
 
 }

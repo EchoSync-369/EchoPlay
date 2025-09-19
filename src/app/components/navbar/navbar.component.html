@@ -4,6 +4,9 @@
       <button class="icon-button" (click)="navigateTo('home')" title="Home">
         <i class="pi pi-home"></i>
       </button>
+      <button class="icon-button" (click)="navigateTo('favorites')" title="My Favorites">
+        <i class="pi pi-bookmark"></i>
+      </button>
     </div>
   </div>
   <div class="center">
@@ -16,6 +19,17 @@
     </div>
   </div>
   <div class="right">
+    <!-- Add to Favorites button (shown only on player routes) -->
+    <div class="add-to-favorites-container" *ngIf="isOnPlayerRoute">
+      <app-add-to-favorites
+        [spotifyId]="currentSpotifyId"
+        [entityType]="currentEntityType"
+        [metadata]="currentMetadata"
+        [size]="'medium'"
+        (favoriteToggled)="onFavoriteToggled($event)">
+      </app-add-to-favorites>
+    </div>
+    
     <div class="theme-button-container">
       <app-theme-button></app-theme-button>
     </div>

@@ -1,0 +1,251 @@
+<div class="favorites-dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <i class="pi pi-heart-fill" style="color: var(--primary-color)"></i>
+        My Favorites
+      </h1>
+      <p class="dashboard-subtitle">Discover and manage your favorite music</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-stats" *ngIf="summary">
+      <p-card styleClass="summary-card">
+        <div class="stat-content">
+          <div class="stat-number">{{ summary.totalFavorites }}</div>
+          <div class="stat-label">Total Items</div>
+        </div>
+      </p-card>
+      
+      <p-card styleClass="summary-card">
+        <div class="stat-content">
+          <div class="stat-number">{{ summary.tracksCount }}</div>
+          <div class="stat-label">Tracks</div>
+        </div>
+      </p-card>
+      
+      <p-card styleClass="summary-card">
+        <div class="stat-content">
+          <div class="stat-number">{{ summary.albumsCount }}</div>
+          <div class="stat-label">Albums</div>
+        </div>
+      </p-card>
+      
+      <p-card styleClass="summary-card">
+        <div class="stat-content">
+          <div class="stat-number">{{ summary.artistsCount }}</div>
+          <div class="stat-label">Artists</div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <p-divider></p-divider>
+
+  <!-- Controls Section -->
+  <div class="dashboard-controls">
+    <div class="sorting-section">
+      <div class="sort-group">
+        <label for="sortBy">Sort by:</label>
+        <p-dropdown 
+          id="sortBy"
+          [options]="sortOptions" 
+          [(ngModel)]="sortBy" 
+          (onChange)="onSortChange()"
+          styleClass="sort-dropdown">
+        </p-dropdown>
+      </div>
+
+      <div class="sort-group">
+        <label for="sortOrder">Order:</label>
+        <p-selectButton 
+          id="sortOrder"
+          [options]="sortOrderOptions" 
+          [(ngModel)]="sortOrder" 
+          (onChange)="onSortChange()"
+          optionLabel="label" 
+          optionValue="value"
+          styleClass="sort-order-buttons">
+        </p-selectButton>
+      </div>
+    </div>
+
+    <div class="view-controls">
+      <label>View:</label>
+      <p-selectButton 
+        [options]="viewOptions" 
+        [(ngModel)]="viewMode" 
+        optionLabel="label" 
+        optionValue="value">
+      </p-selectButton>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <p-progressSpinner 
+      [style]="{'width': '50px', 'height': '50px'}" 
+      strokeWidth="3" 
+      animationDuration="1s">
+    </p-progressSpinner>
+    <p class="loading-text">Loading your favorites...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && favorites.length === 0">
+    <div class="empty-content">
+      <i class="pi pi-heart" style="font-size: 4rem; color: var(--text-color-secondary)"></i>
+      <h2>No favorites yet</h2>
+      <p>Start exploring music and add your favorites to see them here!</p>
+      <p-button 
+        label="Explore Music" 
+        icon="pi pi-search" 
+        [routerLink]="['/search']"
+        styleClass="p-button-outlined">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Favorites Content -->
+  <div class="favorites-content" *ngIf="!isLoading && favorites.length > 0">
+    
+    <!-- List View -->
+    <div class="favorites-list" *ngIf="viewMode === 'list'">
+      <p-card 
+        *ngFor="let favorite of favorites; trackBy: trackByFavorite" 
+        styleClass="favorite-list-item clickable-card"
+        (click)="openPlayerForFavorite(favorite)">
+        <div class="list-item-content">
+          <div class="item-info">
+            <img 
+              *ngIf="favorite.imageUrl" 
+              [src]="favorite.imageUrl" 
+              [alt]="favorite.entityName"
+              class="item-image"
+              loading="lazy"
+              (error)="onImageError($event, favorite)"
+              (load)="onImageLoad($event, favorite)">
+            <div class="item-fallback" *ngIf="!favorite.imageUrl">
+              <i class="pi pi-image"></i>
+            </div>
+            
+            <div class="item-details">
+              <h3 class="item-title">{{ favorite.entityName }}</h3>
+              <div class="item-meta">
+                <p-tag 
+                  [value]="getEntityTypeLabel(favorite.entityType)" 
+                  [severity]="getEntityTypeSeverity(favorite.entityType)"
+                  [rounded]="true">
+                </p-tag>
+                <span *ngIf="favorite.artistName" class="meta-text">{{ favorite.artistName }}</span>
+                <span *ngIf="favorite.albumName" class="meta-text">{{ favorite.albumName }}</span>
+              </div>
+              <small class="item-date">Added {{ formatDate(favorite.createdAt) }}</small>
+            </div>
+          </div>
+          
+          <div class="item-actions" (click)="$event.stopPropagation()">
+            <p-tag 
+              *ngIf="favorite.category" 
+              [value]="favorite.category.name"
+              severity="info"
+              [rounded]="true">
+            </p-tag>
+            <p-button 
+              icon="pi pi-trash" 
+              severity="danger"
+              size="small"
+              [text]="true"
+              [rounded]="true"
+              (onClick)="confirmRemoveFavorite(favorite)"
+              pTooltip="Remove from favorites"
+              tooltipPosition="top">
+            </p-button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Grid View -->
+    <div class="favorites-grid" *ngIf="viewMode === 'grid'">
+      <div 
+        *ngFor="let favorite of favorites; trackBy: trackByFavorite" 
+        class="carousel-album-card favorite-card"
+        [class.dark-theme]="isDarkMode"
+        [class.light-theme]="!isDarkMode"
+        (click)="openPlayerForFavorite(favorite)"
+        style="cursor: pointer">
+        
+        <!-- Remove from Favorites Button -->
+        <div class="favorites-button-container" (click)="$event.stopPropagation()">
+          <p-button 
+            icon="pi pi-trash" 
+            severity="danger"
+            size="small"
+            [text]="true"
+            [rounded]="true"
+            (onClick)="confirmRemoveFavorite(favorite)"
+            title="Remove from favorites">
+          </p-button>
+        </div>
+
+        <!-- Entity Type Badge -->
+        <div class="entity-badge-container">
+          <p-tag 
+            [value]="getEntityTypeLabel(favorite.entityType)" 
+            [severity]="getEntityTypeSeverity(favorite.entityType)"
+            [rounded]="true"
+            size="small"
+            styleClass="entity-badge">
+          </p-tag>
+        </div>
+
+        <img 
+          [src]="favorite.imageUrl || 'https://c4.wallpaperflare.com/wallpaper/358/736/35/music-icon-symbol-sign-wallpaper-preview.jpg'"
+          [alt]="favorite.entityName"
+          class="album-art"
+          loading="lazy"
+          (error)="onImageError($event, favorite)"
+          (load)="onImageLoad($event, favorite)">
+          
+        <div class="album-title">{{ favorite.entityName }}</div>
+        <div class="album-artist" *ngIf="favorite.artistName">{{ favorite.artistName }}</div>
+        
+        <!-- Category tag at bottom if exists -->
+        <div class="category-tag" *ngIf="favorite.category">
+          <p-tag 
+            [value]="favorite.category.name"
+            severity="info"
+            size="small"
+            [rounded]="true">
+          </p-tag>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="hasError">
+    <div class="error-content">
+      <i class="pi pi-exclamation-triangle" style="font-size: 4rem; color: var(--red-500)"></i>
+      <h2>Oops! Something went wrong</h2>
+      <p>{{ errorMessage }}</p>
+      <p-button 
+        label="Try Again" 
+        icon="pi pi-refresh" 
+        (onClick)="loadData()"
+        severity="danger">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog 
+    [style]="{'width': '50vw'}"
+    [baseZIndex]="10000"
+    rejectButtonStyleClass="p-button-text">
+  </p-confirmDialog>
+</div>

@@ -1,15 +1,36 @@
+/* Import PrimeNG Icons */
+@import 'primeicons/primeicons.css';
+
 /* Light theme (default) */
 :root {
   --background-color: #fff;
   --text-color: #222;
+  --text-color-secondary: #666;
   --primary-color: #1db954;
+  --surface-card: #ffffff;
+  --surface-ground: #f8f9fa;
+  --surface-section: #ffffff;
+  --surface-border: #dee2e6;
+  
+  /* Light theme shadows */
+  --card-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  --card-shadow-hover: 0 4px 12px rgba(0,0,0,.15), 0 2px 4px rgba(0,0,0,.12), 0 1px 6px rgba(0,0,0,.1);
 }
 
 /* Dark theme */
 body.dark-mode {
   --background-color: #181818;
   --text-color: #eee;
+  --text-color-secondary: #aaa;
   --primary-color: #1db954;
+  --surface-card: #2a2a2a;
+  --surface-ground: #181818;
+  --surface-section: #2a2a2a;
+  --surface-border: #3e3e3e;
+  
+  /* Dark theme shadows - more subtle */
+  --card-shadow: 0 2px 1px -1px rgba(0,0,0,.4), 0 1px 1px 0 rgba(0,0,0,.3), 0 1px 3px 0 rgba(0,0,0,.25);
+  --card-shadow-hover: 0 4px 12px rgba(0,0,0,.3), 0 2px 4px rgba(0,0,0,.25), 0 1px 6px rgba(0,0,0,.2);
 }
 
 /* Apply variables */

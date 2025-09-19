@@ -40,7 +40,7 @@ export class SearchPageComponent implements OnDestroy {
         ? results.albums.items.filter(Boolean).map((album: any) => ({
             id: album?.id ?? "",
             name: album?.name ?? "",
-            artists: album?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
+            artists: album?.artists ?? [],
             images: album?.images ?? [],
             type: album?.type ?? "album",
           }))
@@ -68,7 +68,7 @@ export class SearchPageComponent implements OnDestroy {
         ? results.tracks.items.filter(Boolean).map((track: any) => ({
             id: track?.id ?? "",
             name: track?.name ?? "",
-            artists: track?.artists?.map((artist: any) => artist?.name ?? "").join(", ") || "",
+            artists: track?.artists ?? [],
             album: track?.album?.name ?? "",
             images: track?.album?.images ?? [],
             type: track?.type ?? "track",

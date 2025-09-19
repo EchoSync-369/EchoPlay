@@ -3,11 +3,13 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../services/themes/theme.service';
+import { AddToFavoritesComponent } from '../add-to-favorites/add-to-favorites.component';
+import { FavoriteEntityType } from '../../models/favorites.model';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [CarouselModule, CommonModule],
+  imports: [CarouselModule, CommonModule, AddToFavoritesComponent],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css'
 })
@@ -64,6 +66,32 @@ export class CarouselComponent implements OnInit, OnDestroy {
       this.router.navigate(['/player', card.type, card.id]);
       console.log("Selected Card", card);
     }
+  }
+
+  onFavoriteToggle(event: { spotifyId: string; isFavorite: boolean }): void {
+    console.log('Favorite toggled from carousel:', event);
+  }
+
+  getEntityType(data: any): FavoriteEntityType {
+    // Determine entity type based on the data structure
+    // Albums typically have 'album_type' or we can check if it has 'type' property
+    if (data.album_type || data.type === 'album') {
+      return FavoriteEntityType.Album;
+    } else if (data.type === 'artist') {
+      return FavoriteEntityType.Artist;
+    } else {
+      // Default to track for most items
+      return FavoriteEntityType.Track;
+    }
+  }
+
+  getMetadata(data: any): any {
+    return {
+      name: data.name,
+      artists: data.artists ? data.artists.map((artist: any) => artist.name).join(', ') : 'Unknown Artist',
+      album: data.album?.name || data.name, // Use album name if available, otherwise use the item name
+      image: data.images && data.images.length > 0 ? data.images[0].url : null
+    };
   }
 
   getCurrentTheme(): string {
