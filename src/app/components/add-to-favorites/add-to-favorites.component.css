@@ -1,0 +1,131 @@
+.favorite-btn {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.favorite-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.favorite-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Size variations */
+.favorite-btn--small {
+  width: 32px;
+  height: 32px;
+}
+
+.favorite-btn--medium {
+  width: 40px;
+  height: 40px;
+}
+
+.favorite-btn--large {
+  width: 48px;
+  height: 48px;
+}
+
+.favorite-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.heart-icon {
+  width: 60%;
+  height: 60%;
+  transition: all 0.3s ease;
+}
+
+.heart-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+
+.heart-icon path.filled {
+  fill: #ff4757;
+  stroke: #ff4757;
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+.favorite-btn--active .heart-icon {
+  color: #ff4757;
+}
+
+.favorite-btn:not(.favorite-btn--active) .heart-icon {
+  color: #666;
+}
+
+.favorite-btn:not(.favorite-btn--active):hover .heart-icon {
+  color: #ff4757;
+  transform: scale(1.1);
+}
+
+/* Loading spinner */
+.favorite-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  width: 60%;
+  height: 60%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ff4757;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Error state */
+.favorite-error {
+  font-size: 60%;
+  opacity: 0.8;
+}
+
+/* Accessibility */
+.favorite-btn:focus {
+  outline: 2px solid #ff4757;
+  outline-offset: 2px;
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .favorite-btn:not(.favorite-btn--active) .heart-icon {
+    color: #ccc;
+  }
+}
