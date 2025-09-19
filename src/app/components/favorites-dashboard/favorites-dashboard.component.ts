@@ -183,24 +183,22 @@ export class FavoritesDashboardComponent implements OnInit, OnDestroy {
   }
 
   removeFavorite(favorite: Favorite) {
-    if (confirm(`Remove "${favorite.entityName}" from favorites?`)) {
-      this.favoritesService.removeFavorite(favorite.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            // Remove from local array
-            this.favorites = this.favorites.filter(f => f.id !== favorite.id);
-            // Reload summary
-            this.favoritesService.getFavoritesSummary()
-              .pipe(takeUntil(this.destroy$))
-              .subscribe(summary => this.summary = summary);
-          },
-          error: (error) => {
-            console.error('Error removing favorite:', error);
-            alert('Failed to remove favorite. Please try again.');
-          }
-        });
-    }
+    this.favoritesService.removeFavorite(favorite.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          // Remove from local array
+          this.favorites = this.favorites.filter(f => f.id !== favorite.id);
+          // Reload summary
+          this.favoritesService.getFavoritesSummary()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(summary => this.summary = summary);
+        },
+        error: (error) => {
+          console.error('Error removing favorite:', error);
+          alert('Failed to remove favorite. Please try again.');
+        }
+      });
   }
 
   trackByFavorite(index: number, favorite: Favorite): number {
