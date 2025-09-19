@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../services/favorites.service';
-import { FavoriteEntityType } from '../../models/favorites.model';
-import { Subject, takeUntil } from 'rxjs';
+import { FavoriteEntityType, Favorite } from '../../models/favorites.model';
+import { Subject, takeUntil, take } from 'rxjs';
 
 export type FavoriteSize = 'small' | 'medium' | 'large';
 
@@ -74,36 +74,50 @@ export class AddToFavoritesComponent implements OnInit, OnDestroy {
     this.hasError = false;
 
     if (this.isFavorite) {
-      // Find the favorite to remove
-      this.favoritesService.favorites$.pipe(takeUntil(this.destroy$)).subscribe(favorites => {
-        const favorite = favorites.find(f => 
+      // Remove favorite - use the stored favoriteId or find it
+      let favoriteIdToRemove: number | null = null;
+      
+      // First try to find the favorite ID from current favorites
+      this.favoritesService.favorites$.pipe(
+        take(1) // Only take the current value, don't subscribe ongoing
+      ).subscribe((favorites: Favorite[]) => {
+        const favorite = favorites.find((f: Favorite) => 
           f.spotifyId === this.spotifyId && f.entityType === this.entityType
         );
-        
-        if (favorite) {
-          this.favoritesService.removeFavorite(favorite.id)
-            .subscribe({
-              next: () => {
-                this.isFavorite = false;
-                this.isLoading = false;
-                this.hasError = false;
-                
-                this.favoriteToggled.emit({
-                  spotifyId: this.spotifyId,
-                  isFavorite: false
-                });
-              },
-              error: (error: any) => {
-                console.error('Error removing favorite:', error);
-                this.isLoading = false;
-                this.hasError = true;
-              }
-            });
-        } else {
-          this.isLoading = false;
-          this.hasError = true;
-        }
+        favoriteIdToRemove = favorite?.id || null;
       });
+
+      if (favoriteIdToRemove) {
+        this.favoritesService.removeFavorite(favoriteIdToRemove)
+          .subscribe({
+            next: () => {
+              this.isFavorite = false;
+              this.isLoading = false;
+              this.hasError = false;
+              
+              this.favoriteToggled.emit({
+                spotifyId: this.spotifyId,
+                isFavorite: false
+              });
+            },
+            error: (error: any) => {
+              console.error('Error removing favorite:', error);
+              this.isLoading = false;
+              this.hasError = true;
+            }
+          });
+      } else {
+        // If we can't find the favorite, still try to update the UI optimistically
+        console.warn('Could not find favorite to remove, updating UI optimistically');
+        this.isFavorite = false;
+        this.isLoading = false;
+        this.hasError = false;
+        
+        this.favoriteToggled.emit({
+          spotifyId: this.spotifyId,
+          isFavorite: false
+        });
+      }
     } else {
       // Add new favorite
       const addRequest = {
