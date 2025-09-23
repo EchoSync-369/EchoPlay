@@ -1,0 +1,66 @@
+<!-- User Profile Avatar Button -->
+<div class="user-profile-container" (click)="toggleDropdown()">
+  <div class="avatar-container">
+    <img 
+      *ngIf="userImage; else fallbackAvatar" 
+      [src]="userImage" 
+      [alt]="user?.display_name || 'User Avatar'"
+      class="user-avatar"
+      (error)="userImage = null"
+    />
+    <ng-template #fallbackAvatar>
+      <div class="avatar-fallback">
+        {{ getInitials() }}
+      </div>
+    </ng-template>
+  </div>
+  
+  <!-- Dropdown arrow indicator -->
+  <i class="pi pi-chevron-down dropdown-arrow" 
+     [class.rotated]="isDropdownOpen"></i>
+</div>
+
+<!-- Debug info (remove later) -->
+<!-- <div style="color: white; font-size: 12px;">Dropdown Open: {{ isDropdownOpen }}</div> -->
+
+<!-- Dropdown Menu -->
+<div class="dropdown-menu" 
+     [class.open]="isDropdownOpen"
+     (click)="onDropdownClick($event)">
+  
+  <div class="dropdown-header" *ngIf="user">
+    <div class="user-info">
+      <div class="user-avatar-large">
+        <img 
+          *ngIf="userImage; else fallbackAvatarLarge" 
+          [src]="userImage" 
+          [alt]="user.display_name"
+          class="user-avatar-img"
+        />
+        <ng-template #fallbackAvatarLarge>
+          <div class="avatar-fallback-large">
+            {{ getInitials() }}
+          </div>
+        </ng-template>
+      </div>
+      <div class="user-details">
+        <div class="user-name">{{ user.display_name }}</div>
+        <div class="user-email">{{ user.email }}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dropdown-divider"></div>
+  
+  <div class="dropdown-actions">
+    <button class="dropdown-item logout-btn" (click)="logout()">
+      <i class="pi pi-sign-out"></i>
+      <span>Sign Out</span>
+    </button>
+  </div>
+</div>
+
+<!-- Backdrop for mobile -->
+<div class="dropdown-backdrop" 
+     *ngIf="isDropdownOpen" 
+     (click)="isDropdownOpen = false"></div>

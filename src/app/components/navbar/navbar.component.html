@@ -33,5 +33,10 @@
     <div class="theme-button-container">
       <app-theme-button></app-theme-button>
     </div>
+
+    <!-- User Profile Dropdown (shown only when authenticated) -->
+    <div class="user-profile-container" *ngIf="isAuthenticated">
+      <app-user-profile-dropdown></app-user-profile-dropdown>
+    </div>
   </div>
 </div>

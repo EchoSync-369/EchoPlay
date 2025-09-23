@@ -3,15 +3,17 @@ import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { ThemeButtonComponent } from "../theme-button/theme-button.component";
 import { SearchBarComponent } from "../search-bar/search-bar.component";
 import { AddToFavoritesComponent } from "../add-to-favorites/add-to-favorites.component";
+import { UserProfileDropdownComponent } from "../user-profile-dropdown/user-profile-dropdown.component";
 import { CommonModule } from "@angular/common";
 import { Subject, takeUntil, filter } from "rxjs";
 import { FavoriteEntityType } from "../../models/favorites.model";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [CommonModule, ThemeButtonComponent, SearchBarComponent, AddToFavoritesComponent],
+  imports: [CommonModule, ThemeButtonComponent, SearchBarComponent, AddToFavoritesComponent, UserProfileDropdownComponent],
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.css"],
 })
@@ -26,15 +28,41 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentEntityType: FavoriteEntityType = FavoriteEntityType.Track;
   currentMetadata: any = {};
 
+  // Authentication state
+  isAuthenticated: boolean = false;
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router, 
     private activatedRoute: ActivatedRoute,
-    private spotifyApiService: SpotifyApiService
+    private spotifyApiService: SpotifyApiService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    // Initial authentication check
+    this.isAuthenticated = this.authService.isAuthenticated();
+    console.log('Navbar: Initial auth state:', this.isAuthenticated);
+    
+    // Subscribe to authentication state changes
+    this.authService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        const newAuthState = !!user;
+        console.log('Navbar: Auth state changed:', newAuthState, user);
+        this.isAuthenticated = newAuthState;
+      });
+
+    // Also check localStorage periodically for changes
+    setInterval(() => {
+      const hasUserData = this.authService.hasUserData();
+      if (hasUserData !== this.isAuthenticated) {
+        console.log('Navbar: Auth state mismatch detected, refreshing');
+        this.authService.refreshAuthState();
+      }
+    }, 2000);
+
     // Listen to route changes to detect when we're on a player route
     this.router.events
       .pipe(
@@ -43,6 +71,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.checkPlayerRoute();
+        // Also refresh auth state on route changes (like after login redirect)
+        if (this.authService.hasUserData() && !this.isAuthenticated) {
+          console.log('Navbar: Route change detected, refreshing auth state');
+          this.authService.refreshAuthState();
+        }
       });
 
     // Initial check
