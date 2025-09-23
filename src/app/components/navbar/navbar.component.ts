@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { Subject, takeUntil, filter } from "rxjs";
 import { FavoriteEntityType } from "../../models/favorites.model";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: "app-navbar",
@@ -31,7 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router, 
     private activatedRoute: ActivatedRoute,
-    private spotifyApiService: SpotifyApiService
+    private spotifyApiService: SpotifyApiService,
+    private http: HttpClient 
   ) {}
 
   ngOnInit() {
@@ -163,6 +165,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   handleSearch(query: string) {
+    const jwt = localStorage.getItem('jwt_token');
+    this.http.post(
+      "https://localhost:7244/api/UserSearchHistory",
+      { query },
+      {
+        headers: jwt ? { Authorization: `Bearer ${jwt}` } : {},
+        withCredentials: true
+      }
+    ).subscribe({
+      next: (res) => {
+        console.log('Search results:', res);
+      },
+      error: (err) => {
+        console.error('Search error:', err);
+      }
+    });
+
     this.router.navigate(["/search/" + query]);
   }
 
