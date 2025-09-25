@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import {
@@ -33,22 +33,29 @@ export class FavoritesService {
     this.loadInitialData();
   }
 
-  // Get current user email from localStorage (you might want to get this from auth service)
-  private getCurrentUserEmail(): string {
-    // This should come from your auth service
-    return 'iluisflores@yahoo.com'; // Replace with actual user email from auth
+  // Get JWT token from localStorage
+  private getJwtToken(): string | null {
+    const token = localStorage.getItem('jwt_token');
+    console.log('[FavoritesService] JWT Token:', token ? 'Present' : 'Missing');
+    return token;
   }
 
-  private getHttpParams(additionalParams?: { [key: string]: string }): HttpParams {
-    let params = new HttpParams().set('email', this.getCurrentUserEmail());
+  // Create HTTP headers with JWT token
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getJwtToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
     
-    if (additionalParams) {
-      Object.keys(additionalParams).forEach(key => {
-        params = params.set(key, additionalParams[key]);
-      });
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+      console.log('[FavoritesService] Authorization header added');
+    } else {
+      console.warn('[FavoritesService] No JWT token found, requests will fail');
     }
     
-    return params;
+    return headers;
   }
 
   // Initialize data
@@ -62,83 +69,83 @@ export class FavoritesService {
 
   // Get favorites summary
   getFavoritesSummary(): Observable<FavoritesSummary> {
-    const params = this.getHttpParams();
-    return this.http.get<FavoritesSummary>(`${this.apiUrl}/favorites/summary`, { params })
-      .pipe(
-        tap(summary => this.summarySubject.next(summary)),
-        catchError(this.handleError)
-      );
+    return this.http.get<FavoritesSummary>(`${this.apiUrl}/favorites/summary`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(summary => this.summarySubject.next(summary)),
+      catchError(this.handleError)
+    );
   }
 
   // Get all favorites
   getFavorites(entityType?: FavoriteEntityType, categoryId?: number): Observable<Favorite[]> {
-    let additionalParams: { [key: string]: string } = {};
+    let params = new HttpParams();
     
     if (entityType !== undefined) {
-      additionalParams['entityType'] = entityType.toString();
+      params = params.set('entityType', entityType.toString());
     }
     if (categoryId !== undefined) {
-      additionalParams['categoryId'] = categoryId.toString();
+      params = params.set('categoryId', categoryId.toString());
     }
-
-    const params = this.getHttpParams(additionalParams);
     
-    return this.http.get<Favorite[]>(`${this.apiUrl}/favorites`, { params })
-      .pipe(
-        map(favorites => favorites.map(f => ({ ...f, createdAt: new Date(f.createdAt) }))),
-        tap(favorites => this.favoritesSubject.next(favorites)),
-        catchError(this.handleError)
-      );
+    return this.http.get<Favorite[]>(`${this.apiUrl}/favorites`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    }).pipe(
+      map(favorites => favorites.map(f => ({ ...f, createdAt: new Date(f.createdAt) }))),
+      tap(favorites => this.favoritesSubject.next(favorites)),
+      catchError(this.handleError)
+    );
   }
 
   // Get grouped favorites
   getFavoritesGrouped(): Observable<FavoritesGrouped[]> {
-    const params = this.getHttpParams();
-    return this.http.get<FavoritesGrouped[]>(`${this.apiUrl}/favorites/grouped`, { params })
-      .pipe(
-        map(groups => groups.map(group => ({
-          ...group,
-          favorites: group.favorites.map(f => ({ ...f, createdAt: new Date(f.createdAt) }))
-        }))),
-        catchError(this.handleError)
-      );
+    return this.http.get<FavoritesGrouped[]>(`${this.apiUrl}/favorites/grouped`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(groups => groups.map(group => ({
+        ...group,
+        favorites: group.favorites.map(f => ({ ...f, createdAt: new Date(f.createdAt) }))
+      }))),
+      catchError(this.handleError)
+    );
   }
 
   // Add favorite
   addFavorite(request: AddFavoriteRequest): Observable<Favorite> {
-    const params = this.getHttpParams();
-    return this.http.post<Favorite>(`${this.apiUrl}/favorites`, request, { params })
-      .pipe(
-        map(favorite => ({ ...favorite, createdAt: new Date(favorite.createdAt) })),
-        tap(() => {
-          this.refreshFavorites();
-          this.refreshSummary();
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.post<Favorite>(`${this.apiUrl}/favorites`, request, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(favorite => ({ ...favorite, createdAt: new Date(favorite.createdAt) })),
+      tap(() => {
+        this.refreshFavorites();
+        this.refreshSummary();
+      }),
+      catchError(this.handleError)
+    );
   }
 
   // Remove favorite
   removeFavorite(id: number): Observable<void> {
-    const params = this.getHttpParams();
-    return this.http.delete<void>(`${this.apiUrl}/favorites/${id}`, { params })
-      .pipe(
-        tap(() => {
-          this.refreshFavorites();
-          this.refreshSummary();
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.delete<void>(`${this.apiUrl}/favorites/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(() => {
+        this.refreshFavorites();
+        this.refreshSummary();
+      }),
+      catchError(this.handleError)
+    );
   }
 
   // Move favorite to different category
   moveFavorite(id: number, request: MoveFavoriteRequest): Observable<void> {
-    const params = this.getHttpParams();
-    return this.http.put<void>(`${this.apiUrl}/favorites/${id}/move`, request, { params })
-      .pipe(
-        tap(() => this.refreshFavorites()),
-        catchError(this.handleError)
-      );
+    return this.http.put<void>(`${this.apiUrl}/favorites/${id}/move`, request, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(() => this.refreshFavorites()),
+      catchError(this.handleError)
+    );
   }
 
   // Check if item is favorited
@@ -178,60 +185,60 @@ export class FavoritesService {
 
   // Get all categories
   getCategories(): Observable<FavoriteCategory[]> {
-    const params = this.getHttpParams();
-    return this.http.get<FavoriteCategory[]>(`${this.apiUrl}/categories`, { params })
-      .pipe(
-        map(categories => categories.map(c => ({ ...c, createdAt: new Date(c.createdAt) }))),
-        tap(categories => this.categoriesSubject.next(categories)),
-        catchError(this.handleError)
-      );
+    return this.http.get<FavoriteCategory[]>(`${this.apiUrl}/categories`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(categories => categories.map(c => ({ ...c, createdAt: new Date(c.createdAt) }))),
+      tap(categories => this.categoriesSubject.next(categories)),
+      catchError(this.handleError)
+    );
   }
 
   // Get single category
   getCategory(id: number): Observable<FavoriteCategory> {
-    const params = this.getHttpParams();
-    return this.http.get<FavoriteCategory>(`${this.apiUrl}/categories/${id}`, { params })
-      .pipe(
-        map(category => ({ ...category, createdAt: new Date(category.createdAt) })),
-        catchError(this.handleError)
-      );
+    return this.http.get<FavoriteCategory>(`${this.apiUrl}/categories/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(category => ({ ...category, createdAt: new Date(category.createdAt) })),
+      catchError(this.handleError)
+    );
   }
 
   // Create category
   createCategory(request: CreateCategoryRequest): Observable<FavoriteCategory> {
-    const params = this.getHttpParams();
-    return this.http.post<FavoriteCategory>(`${this.apiUrl}/categories`, request, { params })
-      .pipe(
-        map(category => ({ ...category, createdAt: new Date(category.createdAt) })),
-        tap(() => this.refreshCategories()),
-        catchError(this.handleError)
-      );
+    return this.http.post<FavoriteCategory>(`${this.apiUrl}/categories`, request, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      map(category => ({ ...category, createdAt: new Date(category.createdAt) })),
+      tap(() => this.refreshCategories()),
+      catchError(this.handleError)
+    );
   }
 
   // Update category
   updateCategory(id: number, request: UpdateCategoryRequest): Observable<void> {
-    const params = this.getHttpParams();
-    return this.http.put<void>(`${this.apiUrl}/categories/${id}`, request, { params })
-      .pipe(
-        tap(() => this.refreshCategories()),
-        catchError(this.handleError)
-      );
+    return this.http.put<void>(`${this.apiUrl}/categories/${id}`, request, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(() => this.refreshCategories()),
+      catchError(this.handleError)
+    );
   }
 
   // Delete category
   deleteCategory(id: number, moveFavoritesToUncategorized: boolean = true): Observable<void> {
-    const params = this.getHttpParams({ 
-      moveFavoritesToUncategorized: moveFavoritesToUncategorized.toString() 
-    });
-    return this.http.delete<void>(`${this.apiUrl}/categories/${id}`, { params })
-      .pipe(
-        tap(() => {
-          this.refreshCategories();
-          this.refreshFavorites();
-          this.refreshSummary();
-        }),
-        catchError(this.handleError)
-      );
+    const params = new HttpParams().set('moveFavoritesToUncategorized', moveFavoritesToUncategorized.toString());
+    return this.http.delete<void>(`${this.apiUrl}/categories/${id}`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    }).pipe(
+      tap(() => {
+        this.refreshCategories();
+        this.refreshFavorites();
+        this.refreshSummary();
+      }),
+      catchError(this.handleError)
+    );
   }
 
   // === UTILITY METHODS ===
@@ -283,7 +290,12 @@ export class FavoritesService {
 
   // Error handling
   private handleError(error: any): Observable<never> {
-    console.error('FavoritesService error:', error);
+    console.error('[FavoritesService] API Error:', error);
+    console.error('[FavoritesService] Error Status:', error.status);
+    console.error('[FavoritesService] Error Message:', error.message);
+    if (error.error) {
+      console.error('[FavoritesService] Error Body:', error.error);
+    }
     return throwError(() => error);
   }
 }
