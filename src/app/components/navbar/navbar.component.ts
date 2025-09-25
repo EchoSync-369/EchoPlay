@@ -8,6 +8,7 @@ import { Subject, takeUntil, filter } from "rxjs";
 import { FavoriteEntityType } from "../../models/favorites.model";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
 import { HttpClient } from '@angular/common/http';
+import { UserSearchHistoryService, IUserSearchHistory } from "../../services/user-search-history/user-search-history.service";
 
 @Component({
   selector: "app-navbar",
@@ -18,8 +19,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @Input() searchText: string = "";
-  @Output() searchTextChange = new EventEmitter<string>();
   @Input() showSearchBar: boolean = true;
+
+  @Output() searchTextChange = new EventEmitter<string>();
 
   // Player route detection
   isOnPlayerRoute: boolean = false;
@@ -33,7 +35,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router, 
     private activatedRoute: ActivatedRoute,
     private spotifyApiService: SpotifyApiService,
-    private http: HttpClient 
+    private http: HttpClient,
+    private userSearchHistoryService: UserSearchHistoryService
   ) {}
 
   ngOnInit() {
@@ -165,15 +168,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   handleSearch(query: string) {
-    const jwt = localStorage.getItem('jwt_token');
-    this.http.post(
-      "https://localhost:7244/api/UserSearchHistory",
-      { query },
-      {
-        headers: jwt ? { Authorization: `Bearer ${jwt}` } : {},
-        withCredentials: true
-      }
-    ).subscribe({
+    this.userSearchHistoryService.addSearch(query).subscribe({
       next: (res) => {
         console.log('Search results:', res);
       },

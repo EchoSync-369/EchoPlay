@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SpotifyApiService } from '../../services/spotify-api/spotify-api.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-test',
@@ -56,7 +57,7 @@ export class TestPageComponent implements OnInit {
             localStorage.setItem("access_token", response.access_token)
             // Example POST to backend with credentials
             this.httpClient.post(
-              "https://localhost:7244/api/auth/login",
+              `${environment.apiUrl}/auth/login`,
               { token: response.access_token }, // example body
               { withCredentials: true }
             ).subscribe({
