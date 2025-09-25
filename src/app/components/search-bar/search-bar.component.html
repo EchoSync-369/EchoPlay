@@ -4,9 +4,27 @@
     pInputText
     [(ngModel)]="searchTerm"
     (keydown.enter)="onSearch()"
+    (focus)="showDropdown = true"
+    (blur)="hideDropdown()"
+    (input)="filterSearches()"
     placeholder="Search for songs, artists, or albums..."
   />
   <button type="button" class="search-btn" (click)="onSearch()">
     <i class="pi pi-search"></i>
   </button>
+  <div class="search-dropdown" *ngIf="showDropdown && filteredSearches.length > 0">
+    <ul>
+      <li *ngFor="let search of filteredSearches" class="search-dropdown-item">
+        <span (mousedown)="selectSearch(search)">{{ search.query }}</span>
+        <button
+          type="button"
+          class="remove-search-btn"
+          (mousedown)="removeSearch(search.id); $event.preventDefault(); $event.stopPropagation();"
+          aria-label="Remove search"
+        >
+          &times;
+        </button>
+      </li>
+    </ul>
+  </div>
 </div>
