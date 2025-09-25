@@ -8,6 +8,8 @@ import { CommonModule } from "@angular/common";
 import { Subject, takeUntil, filter } from "rxjs";
 import { FavoriteEntityType } from "../../models/favorites.model";
 import { SpotifyApiService } from "../../services/spotify-api/spotify-api.service";
+import { HttpClient } from '@angular/common/http';
+import { UserSearchHistoryService, IUserSearchHistory } from "../../services/user-search-history/user-search-history.service";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
@@ -19,8 +21,9 @@ import { AuthService } from "../../services/auth.service";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @Input() searchText: string = "";
-  @Output() searchTextChange = new EventEmitter<string>();
   @Input() showSearchBar: boolean = true;
+
+  @Output() searchTextChange = new EventEmitter<string>();
 
   // Player route detection
   isOnPlayerRoute: boolean = false;
@@ -37,6 +40,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router, 
     private activatedRoute: ActivatedRoute,
     private spotifyApiService: SpotifyApiService,
+    private http: HttpClient,
+    private userSearchHistoryService: UserSearchHistoryService,
     private authService: AuthService
   ) {}
 
@@ -196,6 +201,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   handleSearch(query: string) {
+    this.userSearchHistoryService.addSearch(query).subscribe({
+      next: (res) => {
+        console.log('Search results:', res);
+      },
+      error: (err) => {
+        console.error('Search error:', err);
+      }
+    });
+
     this.router.navigate(["/search/" + query]);
   }
 
