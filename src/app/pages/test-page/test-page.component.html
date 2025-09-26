@@ -1,1 +1,9 @@
-<p>test-page works!</p>
+<div class="test-container">
+  <h1>Welcome to EchoPlay</h1>
+  <div *ngIf="isAuthenticating">
+    <p>Loading...</p>
+  </div>
+  <div *ngIf="!isAuthenticating && !isAuthenticated">
+    <button (click)="initiateAuth()">Login with Spotify</button>
+  </div>
+</div>
