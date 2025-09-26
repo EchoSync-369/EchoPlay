@@ -4,31 +4,17 @@ import { SpotifyApiService } from '../../services/spotify-api/spotify-api.servic
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-test',
   imports: [CommonModule],
-  template: `
-    <div class="test-container">
-      <h2>Test Component</h2>
-      <div *ngIf="isAuthenticating">
-        <p>Authenticating with Spotify...</p>
-      </div>
-      <div *ngIf="!isAuthenticating">
-        <button (click)="initiateAuth()">Start Spotify Auth</button>
-        <p *ngIf="authResult">{{ authResult }}</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .test-container {
-      padding: 20px;
-      text-align: center;
-    }
-  `]
+  templateUrl: './test-page.component.html',
+  styleUrl: './test-page.component.css',
 })
 export class TestPageComponent implements OnInit {
   isAuthenticating = false;
+  isAuthenticated = false;
   authResult = '';
 
   constructor(
@@ -65,6 +51,7 @@ export class TestPageComponent implements OnInit {
                 console.log(res)
                 this.authResult = 'Authentication successful!';
                 this.isAuthenticating = false;
+                this.isAuthenticated = true;
                 
                 // Store the JWT token
                 if ((res as any).token) {
@@ -76,6 +63,7 @@ export class TestPageComponent implements OnInit {
               error: (err) => {
                 this.authResult = 'Backend authentication failed';
                 this.isAuthenticating = false;
+                this.isAuthenticated = false;
               }
             });
             // localStorage.setItem('access_token', response.access_token);

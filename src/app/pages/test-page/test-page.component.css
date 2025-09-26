@@ -1,0 +1,52 @@
+.test-container {
+  padding: 2rem 1.5rem;
+  max-width: min(100vw, 900px);
+  margin: 2.5rem auto;
+  text-align: center;
+  font-family: inherit;
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode .test-container {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+  box-shadow: var(--card-shadow);
+}
+
+.test-container h1, .test-container h2, .test-container h3 {
+  margin-top: 0;
+  /* color: var(--primary-color); */
+}
+
+.test-container p {
+  /* color: var(--text-color-secondary); */
+  margin-bottom: 1.5em;
+}
+
+.test-container button,
+.test-container .btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.test-container button:hover,
+.test-container .btn:hover {
+  background: #169c43;
+}
+
+@media (max-width: 600px) {
+  .test-container {
+    padding: 1rem 0.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+  }
+}
